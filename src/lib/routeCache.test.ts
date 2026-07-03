@@ -34,7 +34,8 @@ describe("routeCache", () => {
   it("固定時刻の結果は日付が変わると失効する", () => {
     const key = cacheKey("新宿", "渋谷", "09:00");
     setCached(key, sampleRoute, false);
-    vi.setSystemTime(new Date("2026-07-05T00:30:00+09:00"));
+    // 実行環境のタイムゾーンに依らず暦日を跨がせるため24時間進める
+    vi.advanceTimersByTime(24 * 60 * 60 * 1000);
     expect(getCached(key)).toBeNull();
   });
 
