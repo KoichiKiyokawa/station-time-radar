@@ -6,6 +6,7 @@ import {
   type Station,
 } from './api/transit'
 import { DEFAULT_DESTINATIONS } from './data/presets'
+import { cacheKey, getCached, setCached } from './lib/routeCache'
 
 export type ResultState =
   | { status: 'loading' }
@@ -55,12 +56,30 @@ function timeParam(): string | undefined {
   return t === 'now' ? undefined : t
 }
 
-function fetchOne(o: Station, d: Station, ctrl: AbortController) {
+function fetchOne(
+  o: Station,
+  d: Station,
+  ctrl: AbortController,
+  bypassCache = false,
+) {
   const key = destKey(d)
+  const time = timeParam()
+  const isNow = departure() === 'now'
+  const rKey = cacheKey(o.name, d.name, time)
+
+  if (!bypassCache) {
+    const cached = getCached(rKey)
+    if (cached) {
+      setResults((prev) => ({ ...prev, [key]: { status: 'done', route: cached } }))
+      return
+    }
+  }
+
   setResults((prev) => ({ ...prev, [key]: { status: 'loading' } }))
-  limit(() => planRoute(o, d, timeParam(), ctrl.signal))
+  limit(() => planRoute(o, d, time, ctrl.signal))
     .then((route) => {
       if (ctrl.signal.aborted) return
+      setCached(rKey, route, isNow)
       setResults((prev) => ({ ...prev, [key]: { status: 'done', route } }))
     })
     .catch((err: unknown) => {
@@ -86,7 +105,7 @@ export function retryDestination(d: Station) {
   const o = origin()
   if (!o) return
   controller ??= new AbortController()
-  fetchOne(o, d, controller)
+  fetchOne(o, d, controller, true)
 }
 
 export function updateOrigin(s: Station) {
