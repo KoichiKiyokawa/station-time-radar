@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-surface: #070b15;
+  --color-ink: #e7ecf5;
+  --color-muted: #8b95a9;
+  --color-accent: #2dd4bf;
+  --font-sans:
+    'Avenir Next', 'Helvetica Neue', system-ui, 'Hiragino Sans',
+    'Yu Gothic UI', sans-serif;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 600px at 50% -10%, #131c33 0%, transparent 60%),
+    var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 起点のパルスリング */
+.origin-pulse {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: origin-pulse 2.8s ease-out infinite;
+}
+
+@keyframes origin-pulse {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.25);
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
