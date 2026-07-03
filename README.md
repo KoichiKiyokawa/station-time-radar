@@ -16,19 +16,14 @@ Vite + SolidJS + TypeScript + Tailwind CSS v4
 ## Usage
 
 ```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build    # dist/ に静的ビルドを出力
+pnpm install
+pnpm dev      # http://localhost:5173
+pnpm build    # dist/ に静的ビルドを出力
 ```
 
 ## Deploy
 
-Cloudflare Workers（静的アセット配信）にデプロイ:
-
-```bash
-npm run build
-npx wrangler deploy
-```
+Cloudflare Workers（静的アセット配信）。mainブランチへのpushでCloudflare側のGit連携が自動デプロイするため、通常は手動デプロイ不要（詳細は [AGENTS.md](./AGENTS.md) 参照）。
 
 ## Data Attribution
 
