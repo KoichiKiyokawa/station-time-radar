@@ -1,17 +1,17 @@
-import { createSignal, onMount, Show } from 'solid-js'
-import AttributionFooter from './components/AttributionFooter'
-import DestinationEditor from './components/DestinationEditor'
-import Radar from './components/Radar'
-import ResultList from './components/ResultList'
-import StationSearch from './components/StationSearch'
-import { departure, origin, runSearch, setDepartureTime, updateOrigin } from './store'
+import { createSignal, onMount, Show } from "solid-js";
+import AttributionFooter from "./components/AttributionFooter";
+import DestinationEditor from "./components/DestinationEditor";
+import Radar from "./components/Radar";
+import ResultList from "./components/ResultList";
+import StationSearch from "./components/StationSearch";
+import { departure, origin, runSearch, setDepartureTime, updateOrigin } from "./store";
 
 export default function App() {
-  const [customTime, setCustomTime] = createSignal('09:00')
+  const [customTime, setCustomTime] = createSignal("09:00");
 
   onMount(() => {
-    if (origin()) runSearch()
-  })
+    if (origin()) runSearch();
+  });
 
   return (
     <div class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-3 sm:px-6">
@@ -23,9 +23,7 @@ export default function App() {
           <circle cx="24" cy="9" r="2.2" fill="#F43F5E" />
         </svg>
         <div>
-          <h1 class="text-sm font-extrabold tracking-[0.25em] text-ink">
-            STATION TIME RADAR
-          </h1>
+          <h1 class="text-sm font-extrabold tracking-[0.25em] text-ink">STATION TIME RADAR</h1>
           <p class="text-[11px] text-muted">起点駅から主要駅への所要時間を一望</p>
         </div>
       </header>
@@ -41,19 +39,19 @@ export default function App() {
           <div class="flex overflow-hidden rounded-lg border border-white/10">
             <button
               class={`px-3 py-1.5 transition-colors ${
-                departure() === 'now'
-                  ? 'bg-accent/20 font-semibold text-accent'
-                  : 'text-muted hover:text-ink'
+                departure() === "now"
+                  ? "bg-accent/20 font-semibold text-accent"
+                  : "text-muted hover:text-ink"
               }`}
-              onClick={() => setDepartureTime('now')}
+              onClick={() => setDepartureTime("now")}
             >
               今すぐ
             </button>
             <label
               class={`flex cursor-pointer items-center gap-1 border-l border-white/10 px-3 py-1.5 transition-colors ${
-                departure() !== 'now'
-                  ? 'bg-accent/20 font-semibold text-accent'
-                  : 'text-muted hover:text-ink'
+                departure() !== "now"
+                  ? "bg-accent/20 font-semibold text-accent"
+                  : "text-muted hover:text-ink"
               }`}
             >
               <input
@@ -62,8 +60,8 @@ export default function App() {
                 class="bg-transparent text-base outline-none [color-scheme:dark] sm:text-xs"
                 onChange={(e) => {
                   if (e.currentTarget.value) {
-                    setCustomTime(e.currentTarget.value)
-                    setDepartureTime(e.currentTarget.value)
+                    setCustomTime(e.currentTarget.value);
+                    setDepartureTime(e.currentTarget.value);
                   }
                 }}
               />
@@ -101,5 +99,5 @@ export default function App() {
 
       <AttributionFooter />
     </div>
-  )
+  );
 }

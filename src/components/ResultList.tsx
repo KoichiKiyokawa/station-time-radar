@@ -1,5 +1,5 @@
-import { createMemo, For, Show } from 'solid-js'
-import type { Station } from '../api/transit'
+import { createMemo, For, Show } from "solid-js";
+import type { Station } from "../api/transit";
 import {
   destinations,
   destKey,
@@ -10,32 +10,32 @@ import {
   retryDestination,
   setHoverKey,
   type ResultState,
-} from '../store'
+} from "../store";
 
 interface Row {
-  key: string
-  station: Station
-  state: ResultState
+  key: string;
+  station: Station;
+  state: ResultState;
 }
 
 export default function ResultList() {
   const rows = createMemo<Row[]>(() => {
-    const res = results()
-    const o = origin()
+    const res = results();
+    const o = origin();
     const list = destinations()
       .filter((d) => !o || destKey(d) !== destKey(o))
       .map((d) => {
-      const key = destKey(d)
-      return { key, station: d, state: res[key] ?? { status: 'loading' as const } }
-    })
+        const key = destKey(d);
+        return { key, station: d, state: res[key] ?? { status: "loading" as const } };
+      });
     const order = (r: Row) =>
-      r.state.status === 'done'
+      r.state.status === "done"
         ? r.state.route.minutes
-        : r.state.status === 'loading'
+        : r.state.status === "loading"
           ? 10_000
-          : 20_000
-    return list.sort((a, b) => order(a) - order(b))
-  })
+          : 20_000;
+    return list.sort((a, b) => order(a) - order(b));
+  });
 
   return (
     <ul class="flex flex-col gap-1.5">
@@ -43,19 +43,17 @@ export default function ResultList() {
         {(row) => (
           <li
             class={`group relative flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${
-              hoverKey() === row.key
-                ? 'border-white/15 bg-white/8'
-                : 'border-white/5 bg-white/3'
+              hoverKey() === row.key ? "border-white/15 bg-white/8" : "border-white/5 bg-white/3"
             }`}
             onMouseEnter={() => setHoverKey(row.key)}
             onMouseLeave={() => setHoverKey(null)}
           >
             <div class="min-w-0 flex-1">
               <div class="font-bold text-ink">{row.station.name}</div>
-              <Show when={row.state.status === 'done' && row.state}>
+              <Show when={row.state.status === "done" && row.state}>
                 {(state) => {
-                  const s = state()
-                  if (s.status !== 'done') return null
+                  const s = state();
+                  if (s.status !== "done") return null;
                   return (
                     <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
                       <For each={s.route.lines}>
@@ -70,10 +68,10 @@ export default function ResultList() {
                         )}
                       </For>
                     </div>
-                  )
+                  );
                 }}
               </Show>
-              <Show when={row.state.status === 'error'}>
+              <Show when={row.state.status === "error"}>
                 <div class="mt-0.5 text-[11px] text-muted">
                   経路が見つかりませんでした
                   <button
@@ -86,16 +84,16 @@ export default function ResultList() {
               </Show>
             </div>
 
-            <Show when={row.state.status === 'done' && row.state}>
+            <Show when={row.state.status === "done" && row.state}>
               {(state) => {
-                const s = state()
-                if (s.status !== 'done') return null
+                const s = state();
+                if (s.status !== "done") return null;
                 return (
                   <div class="flex items-baseline gap-3 text-right">
                     <span class="text-[11px] text-muted">
                       乗換{s.route.transfers}
                       <Show when={s.route.fareIc !== undefined}>
-                        {' · ¥'}
+                        {" · ¥"}
                         {s.route.fareIc}
                       </Show>
                     </span>
@@ -104,10 +102,10 @@ export default function ResultList() {
                       <span class="ml-0.5 text-xs font-medium text-muted">分</span>
                     </span>
                   </div>
-                )
+                );
               }}
             </Show>
-            <Show when={row.state.status === 'loading'}>
+            <Show when={row.state.status === "loading"}>
               <div class="h-5 w-14 animate-pulse rounded bg-white/10" />
             </Show>
 
@@ -122,5 +120,5 @@ export default function ResultList() {
         )}
       </For>
     </ul>
-  )
+  );
 }

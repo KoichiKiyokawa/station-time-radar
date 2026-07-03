@@ -1,5 +1,5 @@
-import StationSearch from './StationSearch'
-import { addDestination, resetDestinations } from '../store'
+import StationSearch from "./StationSearch";
+import { addDestination, resetDestinations } from "../store";
 
 export default function DestinationEditor() {
   return (
@@ -19,5 +19,5 @@ export default function DestinationEditor() {
         </button>
       </div>
     </div>
-  )
+  );
 }

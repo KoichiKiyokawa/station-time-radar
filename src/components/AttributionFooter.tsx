@@ -1,12 +1,12 @@
-import { createResource, createSignal, For, Show } from 'solid-js'
-import { fetchFeeds } from '../api/transit'
+import { createResource, createSignal, For, Show } from "solid-js";
+import { fetchFeeds } from "../api/transit";
 
 export default function AttributionFooter() {
-  const [open, setOpen] = createSignal(false)
+  const [open, setOpen] = createSignal(false);
   const [feeds] = createResource(
     () => open() || undefined,
     () => fetchFeeds(),
-  )
+  );
 
   return (
     <footer class="border-t border-white/5 py-5 text-center text-[11px] text-muted/70">
@@ -20,11 +20,8 @@ export default function AttributionFooter() {
         >
           api.transit.ls8h.com
         </a>
-        ・非公式API）·{' '}
-        <button
-          class="underline underline-offset-2 hover:text-muted"
-          onClick={() => setOpen(true)}
-        >
+        ・非公式API）·{" "}
+        <button class="underline underline-offset-2 hover:text-muted" onClick={() => setOpen(true)}>
           出典・ライセンス
         </button>
       </p>
@@ -71,5 +68,5 @@ export default function AttributionFooter() {
         </div>
       </Show>
     </footer>
-  )
+  );
 }

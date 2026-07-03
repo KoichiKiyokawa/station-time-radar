@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --color-surface: #070b15;
@@ -6,8 +6,7 @@
   --color-muted: #8b95a9;
   --color-accent: #2dd4bf;
   --font-sans:
-    'Avenir Next', 'Helvetica Neue', system-ui, 'Hiragino Sans',
-    'Yu Gothic UI', sans-serif;
+    "Avenir Next", "Helvetica Neue", system-ui, "Hiragino Sans", "Yu Gothic UI", sans-serif;
 }
 
 html {
@@ -17,8 +16,7 @@ html {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(1100px 600px at 50% -10%, #131c33 0%, transparent 60%),
-    var(--color-surface);
+    radial-gradient(1100px 600px at 50% -10%, #131c33 0%, transparent 60%), var(--color-surface);
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
