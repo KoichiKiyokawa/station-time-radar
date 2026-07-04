@@ -153,11 +153,6 @@ export default function StationSearch(props: Props) {
                 <Show when={item.kana}>
                   <span class="text-xs text-muted">{item.kana}</span>
                 </Show>
-                <Show when={!item.isStation}>
-                  <span class="rounded bg-white/10 px-1.5 py-0.5 text-[10px] text-muted">
-                    バス停
-                  </span>
-                </Show>
                 <span class="ml-auto truncate pl-2 text-right text-[11px] text-muted/80">
                   {item.lines.slice(0, 3).join("・")}
                 </span>
