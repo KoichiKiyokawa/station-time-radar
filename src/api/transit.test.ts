@@ -17,7 +17,7 @@ afterEach(() => {
 });
 
 describe("suggestStations", () => {
-  it("同名かつ近接する駅を1件にまとめ、末尾のローマ字を除去する", async () => {
+  it("同名かつ近接する駅を1件にまとめ、末尾のローマ字を除去し、バス停は除外する", async () => {
     mockFetchOnce({
       stations: [
         {
@@ -67,15 +67,12 @@ describe("suggestStations", () => {
 
     const result = await suggestStations("渋谷");
 
-    expect(result).toHaveLength(2);
-    const station = result.find((s) => s.isStation);
+    expect(result).toHaveLength(1);
+    const station = result[0];
     expect(station?.name).toBe("渋谷");
     expect(station?.lines).toEqual(expect.arrayContaining(["山手線", "東京メトロ", "東急"]));
     // 最もweightの大きい候補(id:c)の座標を代表値として採用する
     expect(station?.lat).toBeCloseTo(35.658034);
-
-    const busStop = result.find((s) => !s.isStation);
-    expect(busStop?.name).toBe("渋谷駅前");
   });
 
   it("同名でも2km以上離れていれば別駅として扱う", async () => {

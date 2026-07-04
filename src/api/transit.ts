@@ -9,7 +9,6 @@ export interface Station {
 export interface SuggestedStation extends Station {
   kana?: string;
   lines: string[];
-  isStation: boolean;
 }
 
 export interface RouteLine {
@@ -95,6 +94,7 @@ function normalizeStationName(name: string): string {
 /**
  * 同一駅が路線(feed)ごとに重複して返るため、同名かつ2km以内を同一駅にまとめる。
  * （同名の遠隔駅、例: 東京の府中と広島の府中は別候補のまま残る）
+ * バス停(kind: "stop")は候補に含めない。
  */
 export async function suggestStations(
   query: string,
@@ -115,6 +115,7 @@ export async function suggestStations(
   const groupsByName = new Map<string, Group[]>();
 
   for (const s of data.stations ?? []) {
+    if (s.kind !== "station") continue;
     const w = s.weight ?? 0;
     const name = normalizeStationName(s.name);
     const line = cleanFeedName(s.feedName, s.feedId);
@@ -130,7 +131,6 @@ export async function suggestStations(
           lat: s.lat,
           lon: s.lon,
           lines: [],
-          isStation: s.kind === "station",
         },
         weight: w,
         bestWeight: w,
@@ -141,7 +141,6 @@ export async function suggestStations(
       g.weight += w;
       g.lines.add(line);
       g.station.kana ??= s.nameKana;
-      g.station.isStation ||= s.kind === "station";
       if (w > g.bestWeight) {
         g.bestWeight = w;
         g.station.lat = s.lat;
@@ -152,9 +151,7 @@ export async function suggestStations(
 
   return [...groupsByName.values()]
     .flat()
-    .sort(
-      (a, b) => Number(b.station.isStation) - Number(a.station.isStation) || b.weight - a.weight,
-    )
+    .sort((a, b) => b.weight - a.weight)
     .slice(0, 8)
     .map((g) => ({ ...g.station, lines: [...g.lines].slice(0, 4) }));
 }
